@@ -12,7 +12,9 @@ const PostFeed = ({ posts, admin }) => {
 const PostItem = ({ post, admin = false }) => {
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
-
+  let link = admin
+    ? `/admin/${post.slug}`
+    : `/${post.username}/${post.slug}`;
   return (
     <div className='card'>
       <Link href={`/${post.username}`}>
@@ -20,7 +22,8 @@ const PostItem = ({ post, admin = false }) => {
           <strong>By @{post.username}</strong>
         </a>
       </Link>
-      <Link href={`/${post.username}/${post.slug}`}>
+
+      <Link href={link}>
         <h2>
           <a>{post.title}</a>
         </h2>
