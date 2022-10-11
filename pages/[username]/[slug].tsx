@@ -17,24 +17,31 @@ import {
 } from 'firebase/firestore';
 import { UserContext } from '../../lib/context';
 import { useContext } from 'react';
-
 export async function getStaticProps({ params }) {
   const { username, slug } = params;
-  let post;
-  let path;
   const userDoc = await getUserWithUsername(username);
+
+  let post = null;
+  let path = null;
+
   if (userDoc) {
+    // const postRef = userDoc.ref.collection('posts').doc(slug);
     const postRef = doc(
       getFirestore(),
       userDoc.ref.path,
       'posts',
       slug
     );
+
+    // post = postToJSON(await postRef.get());
     post = postToJSON(await getDoc(postRef));
+
+    path = postRef.path;
   }
+
   return {
     props: { post, path },
-    revalidate: 5000,
+    revalidate: 100,
   };
 }
 

@@ -12,16 +12,18 @@ import {
   getDocs,
   query,
   limit,
+  DocumentData,
+  DocumentSnapshot,
 } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDlpZ80MXzeSMCcXJ1gK3_9L1vKdTam6Sc',
-  authDomain: 'next-firebase-blog-151a9.firebaseapp.com',
-  projectId: 'next-firebase-blog-151a9',
-  storageBucket: 'next-firebase-blog-151a9.appspot.com',
-  messagingSenderId: '449309626847',
-  appId: '1:449309626847:web:cfa734b4754dd5cd95f46a',
-  measurementId: 'G-MM3ZNQ4TVN',
+  apiKey: process.env.NEXT_PUBLIC_apiKey,
+  authDomain: process.env.NEXT_PUBLIC_authDomain,
+  projectId: process.env.NEXT_PUBLIC_projectId,
+  storageBucket: process.env.NEXT_PUBLIC_storageBucket,
+  messagingSenderId: process.env.NEXT_PUBLIC_messagingSenderId,
+  appId: process.env.NEXT_PUBLIC_appId,
+  measurementId: process.env.NEXT_PUBLIC_measurementId,
 };
 
 function createFirebaseApp(config: FirebaseOptions) {
@@ -38,6 +40,7 @@ export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 export const firestore = getFirestore(app);
 export const storage = getStorage(app);
+export const STATE_CHANGED = 'state_changed';
 
 export async function getUserWithUsername(username) {
   const q = query(
@@ -49,7 +52,7 @@ export async function getUserWithUsername(username) {
   return userDoc;
 }
 
-export function postToJSON(doc) {
+export function postToJSON(doc: DocumentSnapshot<DocumentData>) {
   const data = doc.data();
   return {
     ...data,
