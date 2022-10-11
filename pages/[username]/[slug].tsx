@@ -17,6 +17,9 @@ import {
 } from 'firebase/firestore';
 import { UserContext } from '../../lib/context';
 import { useContext } from 'react';
+import AuthCheck from '../../components/AuthCheck';
+import LikeButton from '../../components/LikeButton';
+import Link from 'next/link';
 export async function getStaticProps({ params }) {
   const { username, slug } = params;
   const userDoc = await getUserWithUsername(username);
@@ -80,8 +83,17 @@ const Post = (props) => {
       </section>
       <aside className='card'>
         <p>
-          <strong>{post.heartCount || 0} 💙</strong>
+          <strong>{post.heartCount || 0} 💗</strong>
         </p>
+
+        <AuthCheck
+          fallback={
+            <Link href={'/auth'}>
+              <button>💗 Signup</button>
+            </Link>
+          }>
+          <LikeButton postRef={postRef} />
+        </AuthCheck>
       </aside>
     </main>
   );
